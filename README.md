@@ -5,6 +5,11 @@ A Python package for working with biological ontologies and gene information.
 ## Installation
 
 ```bash
+git clone https://github.com/daqiancode/bio-ontology.git
+cd bio-ontology
+# uv should be installed
+uv venv
+source .venv/bin/activate
 uv sync
 
 # Initialize the environment
