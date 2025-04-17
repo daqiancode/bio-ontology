@@ -65,7 +65,7 @@ def get_development_stage_by_age(age):
         {"ontology_id": "HsapDv:0000093", "name": "aged stage", "range": (65, float("inf"))},
     ]
 
-    for term in hsapdv_terms[1:]:
+    for term in hsapdv_terms:
         start, end = term["range"]
         if start < age <= end or (start < 0 and end == 0 and age < 0):
             return term.copy()
