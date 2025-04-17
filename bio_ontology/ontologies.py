@@ -52,26 +52,25 @@ def get_human_development_stage_ontology(stage: str) -> dict | None:
 
 def get_development_stage_by_age(age):
     """
-    Return HsapDv developmental stage term (ID and label) based on human age in years.
+    Return HsapDv developmental stage term (ontology_id and name) based on human age in years.
     If age < 0, it's treated as prenatal (fetal stage and its sub-stages).
     """
     hsapdv_terms = [
-        {"id": "HsapDv:0000082", "label": "newborn stage", "range": (0, 0.1)},
-        {"id": "HsapDv:0000083", "label": "infant stage", "range": (0.1, 2)},
-        {"id": "HsapDv:0000084", "label": "2-5 year-old child stage", "range": (2, 5)},
-        {"id": "HsapDv:0000085", "label": "6-12 year-old child stage", "range": (5, 12)},
-        {"id": "HsapDv:0000086", "label": "adolescent stage", "range": (12, 18)},
-        {"id": "HsapDv:0000087", "label": "adult stage", "range": (18, 65)},
-        {"id": "HsapDv:0000093", "label": "aged stage", "range": (65, float("inf"))},
+        {"ontology_id": "HsapDv:0000082", "name": "newborn stage", "range": (0, 0.1)},
+        {"ontology_id": "HsapDv:0000083", "name": "infant stage", "range": (0.1, 2)},
+        {"ontology_id": "HsapDv:0000084", "name": "2-5 year-old child stage", "range": (2, 5)},
+        {"ontology_id": "HsapDv:0000085", "name": "6-12 year-old child stage", "range": (5, 12)},
+        {"ontology_id": "HsapDv:0000086", "name": "adolescent stage", "range": (12, 18)},
+        {"ontology_id": "HsapDv:0000087", "name": "adult stage", "range": (18, 65)},
+        {"ontology_id": "HsapDv:0000093", "name": "aged stage", "range": (65, float("inf"))},
     ]
 
     for term in hsapdv_terms[1:]:
         start, end = term["range"]
         if start < age <= end or (start < 0 and end == 0 and age < 0):
-            return {"id": term["id"], "label": term["label"]}
+            return term.copy()
     
-    return {"id": hsapdv_terms[0]["id"], "label": hsapdv_terms[0]["label"]}
-
+    return None
 
 @lru_cache(maxsize=1000)
 def get_ethnicity_ontology(ethnicity: str) -> dict | None:

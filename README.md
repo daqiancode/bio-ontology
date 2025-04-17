@@ -94,63 +94,118 @@ ontology = get_ontology_by_id("CL:0000084")  # T cell
 print(f"Ontology name: {ontology['name']}")
 ```
 
-## Examples
+## Testing
 
-### Finding Gene Information
+The package includes comprehensive test cases to ensure functionality. Here's how to run and write tests:
 
-```python
-# Get TP53 gene information
-gene = get_gene_by_name("TP53")
-print(f"""
-Gene Information:
-- ID: {gene['gene_id']}
-- Name: {gene['gene_name']}
-- Chromosome: {gene['contig']}
-- Start: {gene['start']}
-- End: {gene['end']}
-""")
+### Running Tests
 
-# Get gene sequence
-sequence = get_gene_sequence(gene['gene_id'])
-print(f"Sequence length: {len(sequence)}")
+```bash
+# Run all tests
+pytest tests/
+
+# Run specific test file
+pytest tests/test_genes.py
+pytest tests/test_ontologies.py
+
+# Run with verbose output
+pytest -v tests/
+
+# Run with coverage report
+pytest --cov=bio_ontology tests/
 ```
 
-### Working with Ontologies
+### Test Examples
+
+#### Gene Tests
 
 ```python
-# Get cell type information
-cell_type = get_cell_type_ontology("T cell")
-print(f"""
-Cell Type Information:
-- ID: {cell_type['ontology_id']}
-- Name: {cell_type['name']}
-- Description: {cell_type.get('description', 'N/A')}
-""")
+def test_get_gene_by_name():
+    # Test with a known human gene
+    gene = get_gene_by_name("TP53")
+    assert gene is not None
+    assert "gene_id" in gene
+    assert gene["gene_id"].startswith("ENSG")
+    assert gene["gene_name"] == "TP53"
 
-# Get development stage for different ages
-ages = [0, 1, 5, 15, 30, 70]
-for age in ages:
-    stage = get_development_stage_by_age(age)
-    print(f"Age {age}: {stage['label']}")
+    # Test with a non-existent gene
+    gene = get_gene_by_name("NONEXISTENTGENE")
+    assert gene is None
+
+    # Test with different species
+    gene = get_gene_by_name("Tp53", species="mouse")
+    assert gene is not None
+    assert gene["gene_id"].startswith("ENSMUSG")
 ```
 
-### Cross-species Analysis
+#### Ontology Tests
 
 ```python
-# Compare human and mouse TP53
-human_gene = get_gene_by_name("TP53")
-mouse_gene = get_gene_by_name("Tp53", species="mouse")
+def test_get_cell_type_ontology():
+    # Test with a known cell type
+    result = get_cell_type_ontology("T cell")
+    assert result is not None
+    assert isinstance(result, dict)
+    assert "ontology_id" in result
+    assert result["ontology_id"].startswith("CL:")
 
-print(f"""
-Gene Comparison:
-Human TP53:
-- ID: {human_gene['gene_id']}
-- Length: {human_gene['end'] - human_gene['start']}
+    # Test with a non-existent cell type
+    result = get_cell_type_ontology("NonExistentCellType")
+    assert result is None
 
-Mouse Tp53:
-- ID: {mouse_gene['gene_id']}
-- Length: {mouse_gene['end'] - mouse_gene['start']}
-""")
+def test_get_development_stage_by_age():
+    # Test with various ages
+    test_cases = [
+        (0, "newborn stage"),
+        (0.1, "infant stage"),
+        (1, "infant stage"),
+        (3, "2-5 year-old child stage"),
+        (6, "6-12 year-old child stage"),
+        (13, "adolescent stage"),
+        (20, "adult stage"),
+        (70, "aged stage"),
+    ]
+    
+    for age, expected_stage in test_cases:
+        result = get_development_stage_by_age(age)
+        assert result is not None
+        assert isinstance(result, dict)
+        assert result["name"] == expected_stage
+        assert result["ontology_id"].startswith("HsapDv:")
+```
+
+### Writing New Tests
+
+When adding new functionality, follow these guidelines for writing tests:
+
+1. Create a new test file in the `tests/` directory
+2. Import the necessary functions from the package
+3. Write test functions with descriptive names
+4. Include both positive and negative test cases
+5. Test edge cases and error conditions
+6. Use assertions to verify expected behavior
+
+Example of a new test file:
+
+```python
+# tests/test_new_feature.py
+import pytest
+from bio_ontology.new_feature import new_function
+
+def test_new_function():
+    # Positive test case
+    result = new_function("valid_input")
+    assert result is not None
+    assert isinstance(result, dict)
+    assert "expected_key" in result
+
+    # Negative test case
+    result = new_function("invalid_input")
+    assert result is None
+
+    # Edge case
+    result = new_function("")
+    assert result is None
 ```
 
 ## Contributing
