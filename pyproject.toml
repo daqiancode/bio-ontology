@@ -1,0 +1,12 @@
+[project]
+name = "bio-ontology"
+version = "0.1.0"
+description = "Biological ontologies and gene information"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "gget>=0.29.0",
+    "pyensembl>=2.3.13",
+    "pytest>=8.3.5",
+    "python-dotenv>=1.1.0",
+]
