@@ -1,5 +1,5 @@
 # bio_ontology
-------------
+
 A Python package for working with biological ontologies and gene information.
 
 ## Installation
