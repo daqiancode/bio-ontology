@@ -67,7 +67,7 @@ def get_development_stage_by_age(age):
 
     for term in hsapdv_terms:
         start, end = term["range"]
-        if start < age <= end or (start < 0 and end == 0 and age < 0):
+        if start < age <= end:
             return term.copy()
     
     return None
