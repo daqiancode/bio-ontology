@@ -14,10 +14,14 @@ uv sync
 
 # Initialize the environment
 # go to https://lamin.ai/ to register an account and get api key
+# uv pip install lamindb
 lamin login
-lamin connect
 lamin init --storage lamin-data --modules bionty
+lamin connect lamin-data
 lamin settings
+
+# numpy version should be less than 2 if confliction occurs
+uv pip install "numpy<2" 
 
 # Install dependencies
 uv pip install setuptools
