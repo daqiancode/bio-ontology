@@ -1,14 +1,14 @@
 # bio_ontology
-
+------------
 A Python package for working with biological ontologies and gene information.
 
 ## Installation
 
 ```bash
-# Install the package
-pip install bio_ontology
+uv sync
 
 # Initialize the environment
+# go to https://lamin.ai/ to register an account and get api key
 lamin login
 lamin connect
 lamin init --storage lamin-data --modules bionty
